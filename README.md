@@ -1,9 +1,10 @@
-# [Duplicity][] Cron Runner
+# docker-image-duplicity
 
-[![](https://images.microbadger.com/badges/version/tecnativa/duplicity:latest.svg)](https://microbadger.com/images/tecnativa/duplicity:latest "Get your own version badge on microbadger.com")
-[![](https://images.microbadger.com/badges/image/tecnativa/duplicity:latest.svg)](https://microbadger.com/images/tecnativa/duplicity:latest "Get your own image badge on microbadger.com")
-[![](https://images.microbadger.com/badges/commit/tecnativa/duplicity:latest.svg)](https://microbadger.com/images/tecnativa/duplicity:latest "Get your own commit badge on microbadger.com")
-[![](https://images.microbadger.com/badges/license/tecnativa/duplicity.svg)](https://microbadger.com/images/tecnativa/duplicity "Get your own license badge on microbadger.com")
+[![Build Status](https://travis-ci.org/tmorin/docker-image-duplicity.svg)](https://travis-ci.org/tmorin/docker-image-duplicity)
+[![](https://images.microbadger.com/badges/version/thibaultmorin/duplicity:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity:latest "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/thibaultmorin/duplicity:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity:latest "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/commit/thibaultmorin/duplicity:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity:latest "Get your own commit badge on microbadger.com")
+[![](https://images.microbadger.com/badges/license/thibaultmorin/duplicity.svg)](https://microbadger.com/images/thibaultmorin/duplicity "Get your own license badge on microbadger.com")
 
 ## What?
 
@@ -178,7 +179,7 @@ Add jobs through environment variable pairs. The order will be followed.
 Refer to [Duplicity man page](http://duplicity.nongnu.org/duplicity.1.html), or
 execute:
 
-    docker run -it --rm tecnativa/duplicity duplicity --help
+    docker run -it --rm thibaultmorin/duplicity duplicity --help
 
 ### Shortcuts
 
@@ -206,7 +207,7 @@ Replace `daily` by any other periodicity to test it too.
 Sometimes you need more than just copying a file here, pasting it there. That's
 why we supply some special flavours of this image.
 
-### Normal (`latest`)
+### Normal (`thibaultmorin/duplicity`)
 
 This includes just the most basic packages to boot the cron and use Duplicity
 with any backend. All other images are built on top of this one, so downloading
@@ -219,7 +220,12 @@ It's [preconfigured][Dockerfile] to backup daily:
 JOB_300_WHEN=daily
 ```
 
-### PostgreSQL (`postgres`)
+### PostgreSQL (`thibaultmorin/duplicity-postgres`)
+
+[![](https://images.microbadger.com/badges/version/thibaultmorin/duplicity-postgres:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-postgres:latest "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/thibaultmorin/duplicity-postgres:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-postgres:latest "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/commit/thibaultmorin/duplicity-postgres:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-postgres:latest "Get your own commit badge on microbadger.com")
+[![](https://images.microbadger.com/badges/license/thibaultmorin/duplicity-postgres.svg)](https://microbadger.com/images/thibaultmorin/duplicity-postgres "Get your own license badge on microbadger.com")
 
 If you want to back up a PostgreSQL server, make sure you run this image in a
 fashion similar to this `docker-compose.yaml` definition:
@@ -233,7 +239,7 @@ services:
             POSTGRES_USER: myuser
             POSTGRES_DB: mydb
     backup:
-        image: tecnativa/duplicity:postgres
+        image: thibaultmorin/duplicity-postgres
         hostname: my.postgres.backup
         environment:
             # Postgres connection
@@ -242,13 +248,9 @@ services:
             PGUSER: myuser
 
             # Additional configurations for Duplicity
-            AWS_ACCESS_KEY_ID: example amazon s3 access key
-            AWS_SECRET_ACCESS_KEY: example amazon s3 secret key
-            DST: s3://s3.amazonaws.com/mybucket/myfolder
             EMAIL_FROM: backup@example.com
             EMAIL_TO: alerts@example.com
-            OPTIONS: --s3-european-buckets --s3-use-new-style
-            PASSPHRASE: example backkup encryption secret
+            DST: ftps://user@example.com/some_dir
 ```
 
 It will make [dumps automatically][Dockerfile]:
@@ -259,7 +261,54 @@ It will make [dumps automatically][Dockerfile]:
 JOB_200_WHEN=daily weekly
 ```
 
-### Docker (`docker`)
+### MariaDB (`mariadb`)
+
+[![](https://images.microbadger.com/badges/version/thibaultmorin/duplicity-mariadb:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-mariadb:latest "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/thibaultmorin/duplicity-mariadb:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-mariadb:latest "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/commit/thibaultmorin/duplicity-mariadb:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-mariadb:latest "Get your own commit badge on microbadger.com")
+[![](https://images.microbadger.com/badges/license/thibaultmorin/duplicity-mariadb.svg)](https://microbadger.com/images/thibaultmorin/duplicity-mariadb "Get your own license badge on microbadger.com")
+
+If you want to back up a MariaDB database, make sure you run this image in a
+fashion similar to this `docker-compose.yaml` definition:
+
+```yaml
+services:
+    db:
+        image: mariadb
+        environment:
+            MYSQL_PASSWORD: password
+            MYSQL_USER: user
+            MYSQL_DATABASE: database
+    backup:
+        image: thibaultmorin/duplicity-postgres
+        hostname: my.mariadb.backup
+        environment:
+            # MariaDB connection
+            MYSQL_HOST: db  # This is the default
+            MYSQL_PASSWORD: password  # This is the default
+            MYSQL_USER: user  # This is the default
+            MYSQL_DATABASE: database  # This is the default
+
+            # Additional configurations for Duplicity
+            EMAIL_FROM: backup@example.com
+            EMAIL_TO: alerts@example.com
+            DST: ftps://user@example.com/some_dir
+```
+
+It will make [dumps automatically][Dockerfile]:
+
+```
+# Makes mariadb dumps for all databases except to templates and "postgres". 
+# They are uploaded by JOB_300_WHEN
+JOB_200_WHEN=daily weekly
+```
+
+### Docker (`thibaultmorin/duplicity-docker`)
+
+[![](https://images.microbadger.com/badges/version/thibaultmorin/duplicity-docker:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-docker:latest "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/thibaultmorin/duplicity-docker:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-docker:latest "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/commit/thibaultmorin/duplicity-docker:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-docker:latest "Get your own commit badge on microbadger.com")
+[![](https://images.microbadger.com/badges/license/thibaultmorin/duplicity-docker.svg)](https://microbadger.com/images/thibaultmorin/duplicity-docker "Get your own license badge on microbadger.com")
 
 Imagine you need to run some command in another container to generate a backup
 file before actually backing it up in a remote place.
@@ -288,7 +337,7 @@ services:
             - data:/var/opt/gitlab:z
             - logs:/var/log/gitlab:z
     backup:
-        image: tecnativa/duplicity:docker
+        image: thibaultmorin/duplicity-docker
         hostname: backup
         domainname: gitlab.example.com
         privileged: true  # To speak with host's docker socket
@@ -304,32 +353,10 @@ services:
             JOB_200_WHEN: daily weekly
 
             # Additional configurations for Duplicity
-            AWS_ACCESS_KEY_ID: example amazon s3 access key
-            AWS_SECRET_ACCESS_KEY: example amazon s3 secret key
-            DST: s3://s3.amazonaws.com/mybucket/myfolder
             EMAIL_FROM: backup@example.com
             EMAIL_TO: alerts@example.com
-            OPTIONS: --s3-european-buckets --s3-use-new-style
-            PASSPHRASE: example backup encryption secret
+            DST: ftps://user@example.com/some_dir
 ```
-
-### Amazon S3 (`*-s3`)
-
-Any of the other flavors has a special variant suffixed with `-s3`. It
-provides some opinionated defaults to make good use of S3 different storage
-types and its lifecycle rules and filters, assuming you want to have 
-[weekly full backups][Dockerfile]. You should combine it with lifecycle and 
-expiration rules at your will.
-
-```
-# Full backup of all files
-JOB_500_WHEN=weekly
-```
-
-Note, that for `DST` variable you have to use *old S3 URI style*, i.e. something
-like `s3://s3.amazonaws.com/bucketname`. See this
-[discussion](https://github.com/Tecnativa/doodba-scaffolding/pull/64) for more
-information.
 
 [Alpine]: https://alpinelinux.org/
 [Dockerfile]: https://github.com/Tecnativa/docker-duplicity/blob/master/Dockerfile

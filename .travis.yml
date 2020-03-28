@@ -1,0 +1,28 @@
+language: generic
+arch:
+  - amd64
+  - arm64
+services:
+  - docker
+env:
+  global:
+    - duplicity_version="0.8.08"
+    - prefix_version="-r0"
+    - vcs_ref="$TRAVIS_COMMIT"
+    - tag_image="thibaultmorin/duplicity"
+    - tag_version="$duplicity_version-$TRAVIS_CPU_ARCH"
+    - tag="$tag_image:$tag_version"
+before_install: ./scripts/before_install.sh
+script:
+  - ./scripts/build.sh "${tag}" "base"
+  - ./scripts/build.sh "${tag_image}-docker:${tag_version}" "docker"
+  - ./scripts/build.sh "${tag_image}-mariadb:${tag_version}" "mariadb"
+  - ./scripts/build.sh "${tag_image}-postgres:${tag_version}" "postgres"
+jobs:
+  include:
+    - stage: manifest
+      script:
+        - ./scripts/manifest.sh "$tag_image"
+        - ./scripts/manifest.sh "${tag_image}-docker"
+        - ./scripts/manifest.sh "${tag_image}-mariadb"
+        - ./scripts/manifest.sh "${tag_image}-postgres"
