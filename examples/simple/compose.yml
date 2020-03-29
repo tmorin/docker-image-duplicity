@@ -1,0 +1,18 @@
+version: "3.7"
+
+volumes:
+  backup:
+
+services:
+  backup-test1:
+    image: thibaultmorin/duplicity-cron
+    env_file:
+      - test1.env
+    volumes:
+      - backup:/mnt/backup
+  backup-test2:
+    image: thibaultmorin/duplicity-cron
+    env_file:
+      - test2.env
+    volumes:
+      - backup:/mnt/backup

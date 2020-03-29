@@ -1,0 +1,38 @@
+ARG tag_version="0.8.12-amd64"
+FROM thibaultmorin/duplicity:${tag_version} as cron
+RUN apt-get update -y \
+    # install cron
+    && apt-get install -y cron \
+    # cleanning
+    && apt-get clean \
+    && apt-get autoremove -y \
+    && rm -rf /var/cache/apt/* /var/lib/apt/lists/*\
+    # install setup-cron
+    && ln -s /usr/local/lib/setup-cron.py /usr/local/bin/setup-cron
+COPY rootfs /
+CMD cron -flL0
+ENTRYPOINT [ "/entrypoint.sh" ]
+
+
+FROM cron as mariadb
+RUN apt-get update -y \
+    && apt-get install -y mariadb-client \
+    && apt-get clean \
+    && apt-get autoremove -y \
+    && rm -rf /var/cache/apt/* /var/lib/apt/lists/*
+
+
+FROM cron as postgres
+RUN apt-get update -y \
+    && apt-get install -y postgresql-client \
+    && apt-get clean \
+    && apt-get autoremove -y \
+    && rm -rf /var/cache/apt/* /var/lib/apt/lists/*
+
+
+FROM cron as docker
+RUN apt-get update -y \
+    && apt-get install -y docker.io \
+    && apt-get clean \
+    && apt-get autoremove -y \
+    && rm -rf /var/cache/apt/* /var/lib/apt/lists/*

@@ -1,4 +1,5 @@
 #!/bin/bash
+
 tag_image=$1
 
 docker-tags() {

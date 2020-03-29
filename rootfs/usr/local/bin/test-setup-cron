@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+
+eval "$(curl -q -s https://raw.githubusercontent.com/coryb/osht/master/osht.sh)"
+
+rm -Rf /workdir/*
+
+########################
+TASK_tc_CRONTAB="*/5 * * * *" \
+TASK_tc_PREPARE="touch /workdir/tc.prepare" \
+TASK_tc_EXTRACT="touch /workdir/tc.extract" \
+TASK_tc_TRANSFORM="touch /workdir/tc.transform" \
+TASK_tc_LOAD="touch /workdir/tc.load" \
+TASK_tc_SUCCEED="touch /workdir/tc.succeed" \
+TASK_tc_FAILED="touch /workdir/tc.failed" \
+TASK_tc_FINALLY="touch /workdir/tc.finally" \
+setup-cron
+
+RUNS /tasks/tc.sh
+OGREP execute_prepare
+OGREP execute_extract
+OGREP execute_transform
+OGREP execute_load
+OGREP execute_succeed
+NOGREP execute_failed
+OGREP execute_finally
+RUNS cat /workdir/tc.prepare
+RUNS cat /workdir/tc.extract
+RUNS cat /workdir/tc.transform
+RUNS cat /workdir/tc.load
+RUNS cat /workdir/tc.succeed
+NRUNS cat /workdir/tc.failed
+RUNS cat /workdir/tc.finally
+RUNS cat /etc/cron.tc/task
+RUNS tail -n 1 /etc/crontab
+OGREP "*/5 * * * *"
+OGREP "/etc/cron.tc"
+
+########################
+TASK_th_PERIODICITY="hourly" \
+TASK_th_PREPARE="touch /workdir/th.prepare" \
+TASK_th_EXTRACT="touch /workdir/th.extract" \
+TASK_th_TRANSFORM="cat /does/not/exist" \
+TASK_th_LOAD="touch /workdir/th.load" \
+TASK_th_SUCCEED="touch /workdir/th.succeed" \
+TASK_th_FAILED="touch /workdir/th.failed" \
+TASK_th_FINALLY="touch /workdir/th.finally" \
+setup-cron
+
+RUNS /tasks/th.sh
+OGREP execute_prepare
+OGREP execute_extract
+OGREP execute_transform
+NOGREP execute_load
+NOGREP execute_succeed
+OGREP execute_failed
+OGREP execute_finally
+RUNS cat /workdir/th.prepare
+RUNS cat /workdir/th.extract
+NRUNS cat /workdir/th.transform
+NRUNS cat /workdir/th.load
+NRUNS cat /workdir/th.succeed
+RUNS cat /workdir/th.failed
+RUNS cat /workdir/th.finally
+RUNS cat /etc/cron.hourly/th
+
+########################
+TASK_td_PERIODICITY="daily" \
+TASK_td_EXTRACT='echo touch > $SRC/td.file' \
+TASK_td_TRANSFORM='xz $SRC/td.file' \
+TASK_td_LOAD='cp $SRC/td.file.xz $DST' \
+setup-cron
+
+RUNS /tasks/td.sh
+RUNS cat /etc/cron.daily/td
+RUNS cat /workdir/td/src/td.file.xz
+RUNS cat /workdir/td/dst/td.file.xz
+
+########################
+TASK_tw_PERIODICITY="weekly" \
+setup-cron
+
+RUNS /tasks/tw.sh
+RUNS cat /etc/cron.weekly/tw
+
+########################
+TASK_tm_PERIODICITY="monthly" \
+setup-cron
+
+RUNS /tasks/tm.sh
+RUNS cat /etc/cron.monthly/tm

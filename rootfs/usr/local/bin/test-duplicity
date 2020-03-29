@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+eval "$(curl -q -s https://raw.githubusercontent.com/coryb/osht/master/osht.sh)"
+
+rm -Rf /workdir/*
+mkdir -p /workdir/source /workdir/output
+echo "the content" > /workdir/source/a_file
+
+PASSPHRASE=pass RUNS duplicity full /workdir/source file:///workdir/output
+OGREP "SourceFiles 2"
+OGREP "NewFiles 2"
+OGREP "DeltaEntries 2"
+OGREP "Errors 0"

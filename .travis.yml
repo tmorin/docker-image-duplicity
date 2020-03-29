@@ -1,32 +1,76 @@
 language: generic
+dist: xenial
+os: linux
 arch:
   - amd64
   - arm64
+
 services:
   - docker
+
 env:
   global:
-    - duplicity_version="0.8.08"
-    - prefix_version="-r0"
+    - duplicity_version="0.8.12"
+    - prefix_version=".1612"
     - vcs_ref="$TRAVIS_COMMIT"
     - tag_image="thibaultmorin/duplicity"
     - tag_version="$duplicity_version-$TRAVIS_CPU_ARCH"
     - tag="$tag_image:$tag_version"
-before_install: ./scripts/before_install.sh
-script:
-  - ./scripts/build.sh "${tag}" "base"
-  - ./scripts/build.sh "${tag_image}-docker:${tag_version}" "docker"
-  - ./scripts/build.sh "${tag_image}-mariadb:${tag_version}" "mariadb"
-  - ./scripts/build.sh "${tag_image}-postgres:${tag_version}" "postgres"
+
+before_script: ./scripts/before_install.sh
+
 jobs:
   include:
+
+    - stage: "amd64 - build no backends"
+      arch: amd64
+      script:
+        - ./scripts/build.sh "Dockerfile.no-backends" "${tag_image}-no-backends:${tag_version}"
+    - stage: "amd64 - build duplicity"
+      arch: amd64
+      script:
+        - docker pull ${tag_image}-no-backends:${tag_version}
+        - ./scripts/build.sh "Dockerfile.duplicity" "${tag_image}:${tag_version}"
+    - stage: "amd64 - build flavors"
+      arch: amd64
+      script:
+        - docker pull ${tag_image}:${tag_version}
+        - ./scripts/build.sh "Dockerfile.flavors" "${tag_image}-cron:${tag_version}" "cron"
+        - ./scripts/build.sh "Dockerfile.flavors" "${tag_image}-docker:${tag_version}" "docker"
+        - ./scripts/build.sh "Dockerfile.flavors" "${tag_image}-mariadb:${tag_version}" "mariadb"
+        - ./scripts/build.sh "Dockerfile.flavors" "${tag_image}-postgres:${tag_version}" "postgres"
+
+    - stage: "arm64 - build no backends"
+      arch: arm64
+      script:
+        - ./scripts/build.sh "Dockerfile.no-backends" "${tag_image}-no-backends:${tag_version}"
+    - stage: "arm64 - build duplicity"
+      arch: arm64
+      script:
+        - docker pull ${tag_image}-no-backends:${tag_version}
+        - ./scripts/build.sh "Dockerfile.duplicity" "${tag_image}:${tag_version}"
+    - stage: "arm64 - build flavors"
+      arch: arm64
+      script:
+        - docker pull ${tag_image}:${tag_version}
+        - ./scripts/build.sh "Dockerfile.flavors" "${tag_image}-cron:${tag_version}" "cron"
+        - ./scripts/build.sh "Dockerfile.flavors" "${tag_image}-docker:${tag_version}" "docker"
+        - ./scripts/build.sh "Dockerfile.flavors" "${tag_image}-mariadb:${tag_version}" "mariadb"
+        - ./scripts/build.sh "Dockerfile.flavors" "${tag_image}-postgres:${tag_version}" "postgres"
+
     - stage: manifest
       script:
         - ./scripts/manifest.sh "$tag_image"
         - curl --data "" "https://hooks.microbadger.com/images/thibaultmorin/duplicity/xhyrdJif5tGJNbBrDoi_wBaPSY8="
+
+        - ./scripts/manifest.sh "${tag_image}-cron"
+        - curl --data "" "https://hooks.microbadger.com/images/thibaultmorin/duplicity-cron/ueHXkEXcoOZ68phd6STtod307ok="
+
         - ./scripts/manifest.sh "${tag_image}-docker"
         - curl --data "" "https://hooks.microbadger.com/images/thibaultmorin/duplicity-docker/7xumBndm1wUger-14sL2eQjox-I="
+
         - ./scripts/manifest.sh "${tag_image}-mariadb"
         - curl --data "" "https://hooks.microbadger.com/images/thibaultmorin/duplicity-mariadb/Te4qigjL6obiyDpq43d6hAeWrv0="
+
         - ./scripts/manifest.sh "${tag_image}-postgres"
         - curl --data "" "https://hooks.microbadger.com/images/thibaultmorin/duplicity-postgres/pKHyNgf1gD2ETxQrKIIuV9A9ul8="
