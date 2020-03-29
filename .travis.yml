@@ -23,6 +23,10 @@ jobs:
     - stage: manifest
       script:
         - ./scripts/manifest.sh "$tag_image"
+        - curl --data "" "https://hooks.microbadger.com/images/thibaultmorin/duplicity/xhyrdJif5tGJNbBrDoi_wBaPSY8="
         - ./scripts/manifest.sh "${tag_image}-docker"
+        - curl --data "" "https://hooks.microbadger.com/images/thibaultmorin/duplicity-docker/7xumBndm1wUger-14sL2eQjox-I="
         - ./scripts/manifest.sh "${tag_image}-mariadb"
+        - curl --data "" "https://hooks.microbadger.com/images/thibaultmorin/duplicity-mariadb/Te4qigjL6obiyDpq43d6hAeWrv0="
         - ./scripts/manifest.sh "${tag_image}-postgres"
+        - curl --data "" "https://hooks.microbadger.com/images/thibaultmorin/duplicity-postgres/pKHyNgf1gD2ETxQrKIIuV9A9ul8="
