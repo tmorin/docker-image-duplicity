@@ -261,7 +261,7 @@ It will make [dumps automatically][Dockerfile]:
 JOB_200_WHEN=daily weekly
 ```
 
-### MariaDB (`mariadb`)
+### MariaDB (`thibaultmorin/duplicity-mariadb`)
 
 [![](https://images.microbadger.com/badges/version/thibaultmorin/duplicity-mariadb:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-mariadb:latest "Get your own version badge on microbadger.com")
 [![](https://images.microbadger.com/badges/image/thibaultmorin/duplicity-mariadb:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-mariadb:latest "Get your own image badge on microbadger.com")
