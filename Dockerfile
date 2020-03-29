@@ -28,17 +28,15 @@ ENV CRONTAB_15MIN='*/15 * * * *' \
     SMTP_TLS='' \
     SMTP_USER='' \
     SRC='/mnt/backup/src'
-# Link the job runner in all periodicities available
 RUN ln -s /usr/local/bin/jobrunner /etc/periodic/15min/jobrunner \
     && ln -s /usr/local/bin/jobrunner /etc/periodic/hourly/jobrunner \
     && ln -s /usr/local/bin/jobrunner /etc/periodic/daily/jobrunner \
     && ln -s /usr/local/bin/jobrunner /etc/periodic/weekly/jobrunner \
     && ln -s /usr/local/bin/jobrunner /etc/periodic/monthly/jobrunner \
-    # Runtime dependencies and database clients
-    && apk add --no-cache duplicity=${version}${prefix} \
-    # Default backup source directory
+    && apk add --no-cache \
+        tzdata \
+        duplicity=${version}${prefix} \
     && mkdir -p "$SRC"
-# Preserve cache among containers
 VOLUME [ "/root" ]
 ENTRYPOINT [ "/usr/local/bin/entrypoint" ]
 CMD ["/usr/sbin/crond", "-fd8"]
