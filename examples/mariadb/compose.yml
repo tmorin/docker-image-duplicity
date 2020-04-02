@@ -7,29 +7,23 @@ volumes:
 services:
   mariadb:
     image: mariadb:10.4
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=database
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=user
+    env_file:
+      - database.env
     volumes:
       - type: volume
         source: mariadb
         target: /var/lib/mysql
 
-  backup:
+  duplicity:
     build:
       context: ../../
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.flavors
       target: mariadb
-    environment:
-      - MYSQL_DATABASE=database
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=user
-      - TASK_database_CRONTAB="*/1 * * * *"
-      - TASK_database_PREPARE="mkdir -p /mnt/backup/database"
-      - TASK_database_EXTRACT="mysqldump --host=database --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE > $SRC/database.backup.sql"
-      - TASK_database_LOAD="duplicity $SRC file:///mnt/backup/database"
+    links:
+      - mariadb
+    env_file:
+      - database.env
+      - backup.env
     volumes:
       - type: volume
         source: mariadb

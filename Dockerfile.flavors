@@ -10,7 +10,7 @@ RUN apt-get update -y \
     # install setup-cron
     && ln -s /usr/local/lib/setup-cron.py /usr/local/bin/setup-cron
 COPY rootfs /
-CMD cron -flL0
+CMD cron -fl
 ENTRYPOINT [ "/entrypoint.sh" ]
 
 

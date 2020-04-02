@@ -123,5 +123,5 @@ for taskId, task in tasks.items():
         crontabPath = CONF_ETC_DIR.joinpath("crontab")
         with open(crontabPath.absolute(), "a") as file:
             file.write(
-                f"{task['crontab']} root cd /workdir && run-parts --report {cronPath.parent.absolute()} >/dev/stdout 2>/dev/stderr\n"
+                f"{task['crontab']} root cd /workdir && run-parts --report {cronPath.parent.absolute()} >/proc/1/fd/1 2>/proc/1/fd/2\n"
             )

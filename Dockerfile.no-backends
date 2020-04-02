@@ -9,7 +9,7 @@ LABEL org.label-schema.schema-version="1.0" \
       org.label-schema.build-date="$build_date" \
       org.label-schema.vcs-ref="$vcs_ref" \
       org.label-schema.vcs-url="https://github.com/tmorin/docker-image-duplicity"
-ENV PASSPHRASE=""
+ENV PASSPHRASE="passphrase"
 RUN apt-get update -y \
     && apt-get install -y \
         # install dependencies
