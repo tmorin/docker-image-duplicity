@@ -6,7 +6,7 @@ RUN apt-get update -y \
     # cleanning
     && apt-get clean \
     && apt-get autoremove -y \
-    && rm -rf /var/cache/apt/* /var/lib/apt/lists/*\
+    && rm -rf /var/cache/apt/* /var/lib/apt/lists/* /etc/cron.daily/* /etc/cron.hourly/* /etc/cron.monthly/* /etc/cron.weekly/* \
     # install setup-cron
     && ln -s /usr/local/lib/setup-cron.py /usr/local/bin/setup-cron
 COPY rootfs /
