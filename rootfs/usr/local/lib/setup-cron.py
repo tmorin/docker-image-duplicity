@@ -16,6 +16,7 @@
 # Define tasks with environment variables:
 # TASK_<taskId>_CRONTAB
 # TASK_<taskId>_PERIODICITY
+# TASK_<taskId>_RESTORE
 # TASK_<taskId>_PREPARE
 # TASK_<taskId>_EXTRACT
 # TASK_<taskId>_TRANSFORM
@@ -94,7 +95,7 @@ for taskId, task in tasks.items():
     text += create_bash_function('succeed', task)
     text += create_bash_function('failed', task)
     text += create_bash_function('finally', task)
-    text += f"echo execute task {taskId} - $PASSPHRASE\n"
+    text += f"echo ---- task {taskId} - start ----\n"
     text += "{\n"
     text += "execute_prepare \\\n"
     text += "&& execute_extract \\\n"
@@ -105,23 +106,33 @@ for taskId, task in tasks.items():
     text += "execute_failed\n"
     text += "}\n"
     text += "execute_finally\n"
+    text += f"echo ---- task {taskId} - done ----\n"
     text += "exit 0\n"
     shPath.write_text(text)
     shPath.chmod(0o775)
 
+    if 'restore' in task:
+        lnkPath = CONF_ETC_DIR.joinpath(f"cron.restore/{task['restore']}_{taskId}.sh")
+        lnkPath.parent.mkdir(parents=True, exist_ok=True)
+        if lnkPath.exists():
+            lnkPath.unlink()
+        os.symlink(shPath.absolute(), lnkPath.absolute())
+
     if 'periodicity' in task:
         lnkPath = CONF_ETC_DIR.joinpath(f"cron.{task['periodicity']}/{taskId}")
         lnkPath.parent.mkdir(parents=True, exist_ok=True)
+        if lnkPath.exists():
+            lnkPath.unlink()
         os.symlink(shPath.absolute(), lnkPath.absolute())
 
     if 'crontab' in task:
-        cronPath = CONF_ETC_DIR.joinpath(f"cron.{taskId}/task")
-        cronPath.parent.mkdir(parents=True, exist_ok=True)
-        if cronPath.exists():
-            cronPath.unlink()
-        os.symlink(shPath.absolute(), cronPath.absolute())
+        lnkPath = CONF_ETC_DIR.joinpath(f"cron.{taskId}/task")
+        lnkPath.parent.mkdir(parents=True, exist_ok=True)
+        if lnkPath.exists():
+            lnkPath.unlink()
+        os.symlink(shPath.absolute(), lnkPath.absolute())
         crontabPath = CONF_ETC_DIR.joinpath("crontab")
         with open(crontabPath.absolute(), "a") as file:
             file.write(
-                f"{task['crontab']} root cd /workdir && run-parts --report {cronPath.parent.absolute()} >/proc/1/fd/1 2>/proc/1/fd/2\n"
+                f"{task['crontab']} root cd /workdir && run-parts --report {lnkPath.parent.absolute()} >/proc/1/fd/1 2>/proc/1/fd/2\n"
             )

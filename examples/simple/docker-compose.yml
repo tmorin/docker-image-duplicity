@@ -5,23 +5,30 @@ volumes:
 
 services:
   backup-test1:
-    image: thibaultmorin/duplicity-cron
     build:
       context: "../../"
       dockerfile: "Dockerfile.flavors"
       target: "cron"
-      args:
-        tag_version: "0.8.12-amd64"
     env_file:
       - test1.env
     volumes:
       - backup:/mnt/backup
   backup-test2:
     build:
-      context: ../../
-      dockerfile: Dockerfile.flavors
-      target: cron
+      context: "../../"
+      dockerfile: "Dockerfile.flavors"
+      target: "cron"
     env_file:
       - test2.env
+    volumes:
+      - backup:/mnt/backup
+  restore-test1:
+    build:
+      context: "../../"
+      dockerfile: "Dockerfile.flavors"
+      target: "cron"
+    command: restore
+    env_file:
+      - test1.env
     volumes:
       - backup:/mnt/backup

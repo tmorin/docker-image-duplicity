@@ -35,12 +35,19 @@ A task is identified by a `taskId` and is composed the following steps:
 **6. finally**: always called, it should be used to release resources, cleaning ...
 
 The task can be scheduled using the cron schedule expressions or using the built-in periodicity (hourly, ...).
-
 The cron schedule expression is set with the environment variable `TASK_<taskId>_CRONTAB`.
 The built-in periodicity is set with the environment variable `TASK_<taskId>_CRONTAB`.
 
+A restore task is marked with the environment variable `TASK_<taskId>_RESTORE`.
+The value is the prefix of the task's file name.
+So that, the execution of restore tasks can be ordered.
+The command `execute-restore` executes the restore tasks.
+
+The available environment variables:
+
 `TASK_<taskId>_CRONTAB`
 `TASK_<taskId>_PERIODICITY`
+`TASK_<taskId>_RESTORE`
 `TASK_<taskId>_PREPARE`
 `TASK_<taskId>_EXTRACT`
 `TASK_<taskId>_TRANSFORM`
