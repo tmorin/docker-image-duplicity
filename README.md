@@ -11,7 +11,10 @@ The projects build several images providing services based on [Duplicity](http:/
 [![](https://images.microbadger.com/badges/commit/thibaultmorin/duplicity:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity)
 [![](https://images.microbadger.com/badges/license/thibaultmorin/duplicity.svg)](https://microbadger.com/images/thibaultmorin/duplicity)
 
-This image bundles the Duplicity utility with most of the expected dependencies. Only `python-cloudfiles` cannot be installed, therefore the backend CloudFiles is not available.
+This image bundles the Duplicity utility with most of the expected dependencies. The following python packages are not installed, therefore the related feature are not available:
+
+- `python-cloudfiles`
+- `azure`
 
 ## `thibaultmorin/cron`
 

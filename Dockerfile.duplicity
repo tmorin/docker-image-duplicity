@@ -11,8 +11,6 @@ RUN apt-get update -y \
     && pip3 install \
         requests_oauthlib \
     && pip3 install \
-        azure \
-    && pip3 install \
         b2sdk \
     && pip3 install \
         boto \
@@ -31,6 +29,7 @@ RUN apt-get update -y \
     && pip3 install \
         pyrax \
         # python-cloudfiles \
+        # azure \
     && pip3 install \
         python-swiftclient \
     # cleanning
