@@ -10,8 +10,7 @@ services:
 
 env:
   global:
-    - duplicity_version="0.8.12"
-    - prefix_version=".1612"
+    - duplicity_version="0.8.13"
     - vcs_ref="$TRAVIS_COMMIT"
     - tag_image="thibaultmorin/duplicity"
     - tag_version="$duplicity_version-$TRAVIS_CPU_ARCH"

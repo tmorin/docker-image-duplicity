@@ -1,8 +1,8 @@
 FROM ubuntu:eoan
-ARG version=0.8.12
-ARG prefix=.1612
-ARG vcs_ref
-ARG build_date
+ARG version="0.8.13"
+ARG prefix=""
+ARG vcs_ref=""
+ARG build_date=""
 LABEL org.label-schema.schema-version="1.0" \
       org.label-schema.vendor="tmorin" \
       org.label-schema.license="MIT" \
@@ -29,15 +29,17 @@ RUN apt-get update -y \
         libffi-dev \
         libxml2-dev \
         libxslt-dev \
+    # install basic libraries
     && pip3 install \
-        # install basic libraries
         fasteners \
         future \
         mock \
         python-gettext \
         requests \
+        setuptools_scm \
         urllib3 \
-        # install duplicity
+    # install duplicity
+    && pip3 install \
         https://launchpad.net/duplicity/$(echo ${version} | sed -r 's/^([0-9]+\.[0-9]+)([0-9\.]*)$/\1/')-series/${version}/+download/duplicity-${version}${prefix}.tar.gz \
     # cleanning
     && apt-get clean \

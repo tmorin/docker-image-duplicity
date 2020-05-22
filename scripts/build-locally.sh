@@ -1,7 +1,7 @@
 #!/bin/bash
 
-duplicity_version="0.8.12"
-prefix_version=".1612"
+duplicity_version="0.8.13"
+prefix_version=""
 vcs_ref="unknown"
 tag_image="thibaultmorin/duplicity"
 tag_version="$duplicity_version-amd64"
