@@ -1,6 +1,6 @@
 # docker-image-duplicity
 
-[![Build Status](https://travis-ci.org/tmorin/docker-image-duplicity.svg)](https://travis-ci.org/tmorin/docker-image-duplicity)
+[![Build Status](https://travis-ci.com/tmorin/docker-image-duplicity.svg)](https://travis-ci.com/tmorin/docker-image-duplicity)
 
 The projects build several images providing services based on [Duplicity](http://duplicity.nongnu.org/).
 
