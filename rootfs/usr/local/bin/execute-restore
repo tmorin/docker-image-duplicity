@@ -3,6 +3,6 @@
 set -e
 set -o pipefail
 
-for task in "/etc/cron.restore/*"; do
+for task in /etc/cron.restore/*; do
     cd /workdir && ${task}
 done
