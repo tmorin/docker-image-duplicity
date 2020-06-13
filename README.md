@@ -30,7 +30,7 @@ The cron tasks can be defined by environment variables.
 A task is identified by a `taskId` and is composed the following steps:
 
 **1. prepare**: should be used to install stuff or to create directories ...<br>
-**2. extract**: should be used to extract the data to backup<br>
+**2. extract**: should be used to extract the data to back up<br>
 **3. transform**: should be used to transform the extracted data<br>
 **4. load**: should be used to call duplicity<br>
 **5.1 succeed**: called when all previous steps ended successfully<br>
@@ -41,23 +41,21 @@ The task can be scheduled using the cron schedule expressions or using the built
 The cron schedule expression is set with the environment variable `TASK_<taskId>_CRONTAB`.
 The built-in periodicity (`hourly`, `daily`, `weekly`, `monthly`) is set with the environment variable `TASK_<taskId>_PERIODICITY`.
 
-A restore task is marked with the environment variable `TASK_<taskId>_RESTORE`.
+A restoring task is marked with the environment variable `TASK_<taskId>_RESTORE`.
 The value is the prefix of the task's file name.
 So that, the execution of restore tasks can be ordered.
-The command `execute-restore` executes the restore tasks.
+The command `execute-restore` executes the restoring tasks.
 
 The available environment variables:
 
-`TASK_<taskId>_CRONTAB`
-`TASK_<taskId>_PERIODICITY`
-`TASK_<taskId>_RESTORE`
-`TASK_<taskId>_PREPARE`
-`TASK_<taskId>_EXTRACT`
-`TASK_<taskId>_TRANSFORM`
-`TASK_<taskId>_LOAD`
-`TASK_<taskId>_SUCCEED`
-`TASK_<taskId>_FAILED`
-`TASK_<taskId>_FINALLY`
+- `TASK_<taskId>_CRONTAB` or `TASK_<taskId>_PERIODICITY` or `TASK_<taskId>_RESTORE`
+- `TASK_<taskId>_PREPARE`
+- `TASK_<taskId>_EXTRACT`
+- `TASK_<taskId>_TRANSFORM`
+- `TASK_<taskId>_LOAD`
+- `TASK_<taskId>_SUCCEED`
+- `TASK_<taskId>_FAILED`
+- `TASK_<taskId>_FINALLY`
 
 ## `thibaultmorin/docker`
 
@@ -75,7 +73,7 @@ The image is based on `thibaultmorin/cron` and provides a Docker environment.
 [![](https://images.microbadger.com/badges/commit/thibaultmorin/duplicity-mariadb:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-mariadb)
 [![](https://images.microbadger.com/badges/license/thibaultmorin/duplicity-mariadb.svg)](https://microbadger.com/images/thibaultmorin/duplicity-mariadb)
 
-The image is based on `thibaultmorin/cron` and provides a MariaDB client. Therefore the image can be used to backup regularly dumps of MariaDB databases
+The image is based on `thibaultmorin/cron` and provides a MariaDB client. Therefore, the image can be used to back-up regularly dumps of MariaDB databases
 
 ## `thibaultmorin/postgre`
 
@@ -84,4 +82,4 @@ The image is based on `thibaultmorin/cron` and provides a MariaDB client. Theref
 [![](https://images.microbadger.com/badges/commit/thibaultmorin/duplicity-postgre:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-postgre)
 [![](https://images.microbadger.com/badges/license/thibaultmorin/duplicity-postgre.svg)](https://microbadger.com/images/thibaultmorin/duplicity-postgre)
 
-The image is based on `thibaultmorin/cron` and provides a PostgreSQL client. Therefore the image can be used to backup regularly dumps of PostgreSQL databases
+The image is based on `thibaultmorin/cron` and provides a PostgreSQL client. Therefore, the image can be used to back-up regularly dumps of PostgreSQL databases
