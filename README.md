@@ -16,7 +16,7 @@ This image bundles the Duplicity utility with most of the expected dependencies.
 - `python-cloudfiles`
 - `azure`
 
-## `thibaultmorin/cron`
+## `thibaultmorin/duplicity-cron`
 
 [![](https://images.microbadger.com/badges/version/thibaultmorin/duplicity-cron:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-cron)
 [![](https://images.microbadger.com/badges/image/thibaultmorin/duplicity-cron:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-cron)
@@ -57,29 +57,29 @@ The available environment variables:
 - `TASK_<taskId>_FAILED`
 - `TASK_<taskId>_FINALLY`
 
-## `thibaultmorin/docker`
+## `thibaultmorin/duplicity-docker`
 
 [![](https://images.microbadger.com/badges/version/thibaultmorin/duplicity-docker:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-docker)
 [![](https://images.microbadger.com/badges/image/thibaultmorin/duplicity-docker:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-docker)
 [![](https://images.microbadger.com/badges/commit/thibaultmorin/duplicity-docker:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-docker)
 [![](https://images.microbadger.com/badges/license/thibaultmorin/duplicity-docker.svg)](https://microbadger.com/images/thibaultmorin/duplicity-docker)
 
-The image is based on `thibaultmorin/cron` and provides a Docker environment.
+The image is based on `thibaultmorin/duplicity-cron` and provides a Docker environment.
 
-## `thibaultmorin/mariadb`
+## `thibaultmorin/duplicity-mariadb`
 
 [![](https://images.microbadger.com/badges/version/thibaultmorin/duplicity-mariadb:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-mariadb)
 [![](https://images.microbadger.com/badges/image/thibaultmorin/duplicity-mariadb:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-mariadb)
 [![](https://images.microbadger.com/badges/commit/thibaultmorin/duplicity-mariadb:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-mariadb)
 [![](https://images.microbadger.com/badges/license/thibaultmorin/duplicity-mariadb.svg)](https://microbadger.com/images/thibaultmorin/duplicity-mariadb)
 
-The image is based on `thibaultmorin/cron` and provides a MariaDB client. Therefore, the image can be used to back-up regularly dumps of MariaDB databases
+The image is based on `thibaultmorin/duplicity-cron` and provides a MariaDB client. Therefore, the image can be used to back-up regularly dumps of MariaDB databases
 
-## `thibaultmorin/postgre`
+## `thibaultmorin/duplicity-postgres`
 
 [![](https://images.microbadger.com/badges/version/thibaultmorin/duplicity-postgre:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-postgre)
 [![](https://images.microbadger.com/badges/image/thibaultmorin/duplicity-postgre:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-postgre)
 [![](https://images.microbadger.com/badges/commit/thibaultmorin/duplicity-postgre:latest.svg)](https://microbadger.com/images/thibaultmorin/duplicity-postgre)
 [![](https://images.microbadger.com/badges/license/thibaultmorin/duplicity-postgre.svg)](https://microbadger.com/images/thibaultmorin/duplicity-postgre)
 
-The image is based on `thibaultmorin/cron` and provides a PostgreSQL client. Therefore, the image can be used to back-up regularly dumps of PostgreSQL databases
+The image is based on `thibaultmorin/duplicity-cron` and provides a PostgreSQL client. Therefore, the image can be used to back-up regularly dumps of PostgreSQL databases
