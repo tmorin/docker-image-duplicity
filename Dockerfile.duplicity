@@ -1,4 +1,4 @@
-ARG tag_version="0.8.13-amd64-no-backends"
+ARG tag_version="0.8.16-amd64-no-backends"
 FROM thibaultmorin/duplicity-no-backends:${tag_version}
 RUN apt-get update -y \
     && apt-get install -y \

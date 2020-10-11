@@ -1,5 +1,5 @@
 FROM ubuntu:eoan
-ARG version="0.8.13"
+ARG version="0.8.16"
 ARG prefix=""
 ARG vcs_ref=""
 ARG build_date=""

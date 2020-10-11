@@ -1,6 +1,6 @@
 #!/bin/bash
 
-duplicity_version="0.8.13"
+duplicity_version="0.8.16"
 prefix_version=""
 vcs_ref="unknown"
 tag_image="thibaultmorin/duplicity"
