@@ -1,0 +1,104 @@
+name: Build Images
+on: [ push ]
+env:
+  DOCKER_VERSION_FULL: "0.8.17"
+  DOCKER_VERSION_MINOR: "0.8"
+  DOCKER_VERSION_MAJOR: "0"
+jobs:
+
+  images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          install: true
+
+      - name: Build and push duplicity
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          target: duplicity
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            thibaultmorin/duplicity:${{ env.DOCKER_VERSION_MAJOR }}
+            thibaultmorin/duplicity:${{ env.DOCKER_VERSION_MINOR }}
+            thibaultmorin/duplicity:${{ env.DOCKER_VERSION_FULL }}
+          build-args: |
+            version=${{ env.DOCKER_VERSION_FULL }}
+            git_sha=${{ github.sha }}
+
+      - name: Push duplicity-cron
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          target: cron
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            thibaultmorin/duplicity-cron:${{ env.DOCKER_VERSION_MAJOR }}
+            thibaultmorin/duplicity-cron:${{ env.DOCKER_VERSION_MINOR }}
+            thibaultmorin/duplicity-cron:${{ env.DOCKER_VERSION_FULL }}
+          build-args: |
+            version=${{ env.DOCKER_VERSION_FULL }}
+            git_sha=${{ github.sha }}
+
+      - name: Push duplicity-mariadb
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          target: mariadb
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            thibaultmorin/duplicity-mariadb:${{ env.DOCKER_VERSION_MAJOR }}
+            thibaultmorin/duplicity-mariadb:${{ env.DOCKER_VERSION_MINOR }}
+            thibaultmorin/duplicity-mariadb:${{ env.DOCKER_VERSION_FULL }}
+          build-args: |
+            version=${{ env.DOCKER_VERSION_FULL }}
+            git_sha=${{ github.sha }}
+
+      - name: Push duplicity-postgres
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          target: postgres
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            thibaultmorin/duplicity-postgres:${{ env.DOCKER_VERSION_MAJOR }}
+            thibaultmorin/duplicity-postgres:${{ env.DOCKER_VERSION_MINOR }}
+            thibaultmorin/duplicity-postgres:${{ env.DOCKER_VERSION_FULL }}
+          build-args: |
+            version=${{ env.DOCKER_VERSION_FULL }}
+            git_sha=${{ github.sha }}
+
+      - name: Push duplicity-docker
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          target: docker
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            thibaultmorin/duplicity-docker:${{ env.DOCKER_VERSION_MAJOR }}
+            thibaultmorin/duplicity-docker:${{ env.DOCKER_VERSION_MINOR }}
+            thibaultmorin/duplicity-docker:${{ env.DOCKER_VERSION_FULL }}
+          build-args: |
+            version=${{ env.DOCKER_VERSION_FULL }}
+            git_sha=${{ github.sha }}
